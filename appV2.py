@@ -43,29 +43,42 @@ prompt = PromptTemplate(
       You are a helpful assistant.
       Answer ONLY from the provided transcript context.
       If the context is insufficient, just say you don't know.
-
+      Chat history = {chat_history}  
       {context}
 
       Question: {question}
-      
+
     """,
-    input_variables = ['context', 'question']
+    input_variables = ['context', 'question', 'chat_history']
 )
 
+
+
+chat_history = []
 
 def format_docs(retrieved_docs):
   context_text = "\n\n".join(doc.page_content for doc in retrieved_docs)
   return context_text
+def format_history(chat_history):
+    return "\n".join(f"{entry['role']}: {entry['content']}" for entry in chat_history)
 
 parser = StrOutputParser()
 
 parallel_chain = RunnableParallel(
     {
         "context": retriever | RunnableLambda(format_docs),
-        "question": RunnablePassthrough()
+        "question": RunnablePassthrough(),
+        "chat_history": RunnableLambda(lambda _: format_history(chat_history))
     }
 )
 
 main_chain = parallel_chain | prompt | llm | parser
 
-print(main_chain.invoke("What current status of reservation in India"))
+while True:
+    question = input("Enter your question: ")
+    if question.lower() == "exit":
+        break
+    chat_history.append({"role": "user", "content": question})
+    ans = main_chain.invoke(question)
+    chat_history.append({"role": "AI", "content": ans})
+    print(ans)
