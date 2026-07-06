@@ -2,3 +2,4 @@
 venv/
 appV1.py
 appV2.py
+__pycache__/**/*

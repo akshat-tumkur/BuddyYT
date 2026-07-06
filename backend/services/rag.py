@@ -1,12 +1,10 @@
-from dotenv import load_dotenv
-from backend.services.transcript_service import get_transcript
 from backend.services.vector_store import build_vec_store
 from backend.services.llm import get_llm
 from backend.prompts.prompt import get_prompt
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough, RunnableLambda
 from langchain_core.output_parsers import StrOutputParser
 from backend.utils.helpers import format_docs, format_history
-from backend.services.history import get_or_create_session, add_message, get_recent_history
+from backend.services.history import get_or_create_session, get_recent_history
 
 
 def rag_answer(query, url, session_id=None):

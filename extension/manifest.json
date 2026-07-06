@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "BuddyYT",
+  "version": "1.0",
+
+
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+
+  "permissions": [
+    "sidePanel",
+    "tabs"
+  ],
+
+    "background": {
+    "service_worker": "background.js"
+  },
+
+  "host_permissions": [
+    "http://localhost:8000/*"
+  ]
+}
