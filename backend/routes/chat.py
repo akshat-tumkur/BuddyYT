@@ -14,7 +14,6 @@ class ChatRequest(BaseModel):
 
 @router.post("/chat")
 def chat(request: ChatRequest):
-
     ans = rag_answer(request.query, request.url, request.session_id)
     add_message(request.session_id, "user", request.query)
     add_message(request.session_id, "assistant", ans)
