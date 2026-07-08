@@ -4,16 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BuddyYT</title>
+    <link rel="stylesheet" href="sidepanel.css">
 </head>
 <body>
-    <h1>BuddyYT - Yt Chat Assistant</h1>
-    <p>Hellow world!</p>
-    <!-- <h2>Current URL</h2>
-    <p id="url">Loading...</p>
-    <script src="sidepanel.js"></script> -->
-    <input type="text" id="query" placeholder="Ask a question about this video...">
-    <button id ="submitButton">Submit</button>
-    <p id="response"></p>
+    <div class="panel-shell">
+        <header class="hero">
+            <div class="eyebrow">YouTube companion</div>
+            <div class="hero-copy">
+                <h1>BuddyYT</h1>
+                <p>Ask questions about the active video and get concise, context-aware answers without leaving the page.</p>
+            </div>
+            <div class="status-row">
+                <span class="status-dot"></span>
+                <span class="status-text" id="connectionStatus">Ready to chat</span>
+            </div>
+            <div class="video-card">
+                <div class="video-card-label">Current page</div>
+                <div class="video-card-title" id="pageTitle">Loading active tab...</div>
+                <div class="video-card-url" id="pageUrl">Waiting for tab details</div>
+            </div>
+        </header>
+
+        <main class="chat-panel">
+            <div class="chat-meta">
+                <span class="chat-meta-label">Conversation</span>
+                <span class="chat-meta-count" id="messageCount">0 messages</span>
+            </div>
+
+            <section class="chat-stream" id="chatStream" aria-live="polite" aria-label="Chat conversation"></section>
+
+            <div class="suggestion-chips" id="suggestionChips" aria-label="Suggested questions">
+                <button type="button" class="chip" data-query="Summarize the key points from this video.">Summarize</button>
+                <button type="button" class="chip" data-query="What are the most important takeaways?">Key takeaways</button>
+                <button type="button" class="chip" data-query="What should I remember from this video?">Remember this</button>
+            </div>
+        </main>
+
+        <footer class="composer-shell">
+            <form id="chatForm" class="composer" autocomplete="off">
+                <label class="sr-only" for="query">Ask a question</label>
+                <textarea id="query" rows="3" placeholder="Ask a question about this video..."></textarea>
+                <div class="composer-actions">
+                    <p class="composer-hint">Press Enter to send, Shift+Enter for a new line.</p>
+                    <button id="submitButton" type="submit">Send</button>
+                </div>
+            </form>
+            <p id="response" class="sr-only" aria-hidden="true"></p>
+        </footer>
+    </div>
     <script src="sidepanel.js"></script>
 </body>
 </html>
