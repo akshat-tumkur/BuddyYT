@@ -22,12 +22,10 @@ def get_or_create_session(session_id: Optional[str], url: str) -> str:
 
 
 def add_message(session_id: str, role: str, content: str) -> None:
-    session = session_store.setdefault(
-        session_id,
-        {"url": "", "messages": []},
-    )
-    session["messages"].append({"role": role, "content": content})
-
+    session_store[session_id]["messages"].append({
+        "role": role,
+        "content": content,
+    })
 
 def get_recent_history(session_id: str, limit: int = 8) -> List[Dict[str, str]]:
     session = session_store.get(session_id)

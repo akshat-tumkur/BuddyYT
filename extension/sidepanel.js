@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
         isLoading: false,
         messages: [],
         activeUrl: "",
+        sessionId: null,
     };
 
     renderEmptyState();
@@ -73,11 +74,12 @@ document.addEventListener("DOMContentLoaded", () => {
         appendTypingIndicator();
 
         try {
-            const answer = await askAI(query, activeUrl);
+            const result = await askAI(query, activeUrl, state.sessionId);
+            state.sessionId = result.sessionId || state.sessionId;
             removeTypingIndicator();
-            state.messages.push({ role: "assistant", content: answer || "No answer returned." });
+            state.messages.push({ role: "assistant", content: result.answer || "No answer returned." });
             renderMessages();
-            responseMirror.textContent = answer || "";
+            responseMirror.textContent = result.answer || "";
             setStatus("Answer ready", "ready");
         } catch (error) {
             removeTypingIndicator();
@@ -90,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    async function askAI(query, url) {
+    async function askAI(query, url, sessionId) {
         const response = await fetch("http://localhost:8000/chat", {
             method: "POST",
             headers: {
@@ -99,6 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
             body: JSON.stringify({
                 query,
                 url,
+                session_id: sessionId,
             }),
         });
 
@@ -107,7 +110,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const data = await response.json();
-        return data.answer;
+        return {
+            answer: data.answer,
+            sessionId: data.session_id,
+        };
     }
 
     function renderEmptyState() {

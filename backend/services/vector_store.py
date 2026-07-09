@@ -6,7 +6,7 @@ from pathlib import Path
 import hashlib
 import re
 
-def build_vec_store(url):
+def get_retriever(url):
     embeddings = get_embeddings()
     cache_dir = _get_video_cache_dir(url)
     index_file = cache_dir / "index.faiss"

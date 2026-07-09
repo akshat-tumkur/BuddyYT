@@ -4,3 +4,7 @@ appV1.py
 appV2.py
 __pycache__/**/*
 *.pyc
+backend/cache/*
+!backend/cache/faiss/
+backend/cache/faiss/*
+!backend/cache/faiss/placeholder.txt
