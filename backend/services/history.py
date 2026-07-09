@@ -15,8 +15,7 @@ def create_session(url: str) -> str:
 
 
 def get_or_create_session(session_id: Optional[str], url: str) -> str:
-    if session_id and session_id in session_store:
-        session_store[session_id]["url"] = url
+    if session_id and session_id in session_store and session_store[session_id].get("url") == url:
         return session_id
     return create_session(url)
 

@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
         isLoading: false,
         messages: [],
         activeUrl: "",
+        sessionUrl: "",
         sessionId: null,
     };
 
@@ -64,6 +65,10 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+        if (state.sessionUrl && state.sessionUrl !== activeUrl) {
+            resetConversationForNewVideo();
+        }
+
         state.messages.push({ role: "user", content: query });
         renderMessages();
         queryInput.value = "";
@@ -76,6 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const result = await askAI(query, activeUrl, state.sessionId);
             state.sessionId = result.sessionId || state.sessionId;
+            state.sessionUrl = activeUrl;
             removeTypingIndicator();
             state.messages.push({ role: "assistant", content: result.answer || "No answer returned." });
             renderMessages();
@@ -126,6 +132,13 @@ document.addEventListener("DOMContentLoaded", () => {
         renderMessages();
         setStatus("Ready to chat", "ready");
         syncComposerState();
+    }
+
+    function resetConversationForNewVideo() {
+        state.sessionId = null;
+        state.sessionUrl = "";
+        responseMirror.textContent = "";
+        renderEmptyState();
     }
 
     function renderMessages() {
@@ -207,10 +220,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     async function getActiveUrl() {
-        if (state.activeUrl) {
-            return state.activeUrl;
-        }
-
         const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
         state.activeUrl = tab?.url || "";
         pageTitle.textContent = tab?.title || "Active YouTube tab";
