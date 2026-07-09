@@ -1,4 +1,8 @@
+fastapi
+uvicorn
+pydantic
 langchain
+langchain-text-splitters
 youtube-transcript-api
 langchain-community
 langchain-openai
